@@ -1,0 +1,69 @@
+{% extends "mainMenu.html" %}
+
+{% block content %}
+<a class="active" href="/">Albumy</a>
+<a  href="/repositories">Repozytoria</a>
+<a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content_body %}
+
+
+    <form action="/edit_data" method="post">
+        {% for i in range(details|length) %}
+            <img src={{ details[i][1] }} alt="Album cover"> <br>
+            <table cass = "table">
+                <tr>
+                    <td> album: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].album }}' /></td>
+                </tr>
+                <tr>
+                    <td> wykonawca: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].albumartist }}' /></td>
+                </tr>
+                <tr>
+                    <td> rok wydania: </td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].year }}' /></td>
+                </tr>
+                <tr>
+                    <td>wytwórnia:</td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].label }}' /></td>
+                </tr>
+            </table>
+
+            <table class="table">
+                <tr>
+                    <th>id</th>
+                    <th>tytuł</th>
+                    <th>artysta</th>
+                    <th>rodzaj</th>
+                    <th>czas[s] </th>
+                </tr>
+        <!-- tytuł, artysta, rodzaj, czas trwania-->
+                {% for item in details[i][2] %}
+                <tr>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.id }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.title }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.artist }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.genre }}' /></td>
+                    {% if item.length|int % 60 < 10 %}
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:0{{item.length|int % 60}}' /></td>
+                    {% else %}
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:{{item.length|int % 60}}' /></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+
+    <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+        <button type="submit">Pokaż szczegóły</button>
+    </form>
+
+
+{% endblock %}

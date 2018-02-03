@@ -1,0 +1,19 @@
+{% extends "mainMenu.html" %}
+{% block content %}
+	<a  href="/">Albumy</a>
+    <a  href="/repositories">Repozytoria</a>
+    <a  class="glyphicon glyphicon-plus pos active" href="/import">Dodaj muzykę</a>
+{% endblock %}
+{% block content_body %}
+<div class="main3">
+	<br>
+	<br>
+	<br>
+	<br>
+	<form action="/startImporting" method="post">
+	  <input type="text" name="Path"></input>
+	  <button class="btn btn-lg btn-primary" href="/edycja/dodaj">
+     <span class="glyphicon glyphicon-plus"></span>Importuj</button>
+	</form>
+</div>
+{% endblock %}
