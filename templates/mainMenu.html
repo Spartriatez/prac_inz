@@ -1,47 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div id="sid2" class="sidenav2" style="display:block">
-    <span onclick="openNav()" class="glyphicon glyphicon-chevron-right"></span>
-</div>
 
-<div id="local2" class="slh" style="display:block">
-    <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
-</div>
-
-<div id="local" class="sls" style="width:0;">
-    <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
-    <input type="text" onkeyup="searchLocal();" id="myInput" placeholder="Search">
-    <i class="glyphicon glyphicon-search colores"></i>
-    </input>
-</div>
-
-<div id="sid" class="sidenav" style="width:0;">
-    <div class="right">
-     <span onclick="closeNav()" class="glyphicon glyphicon-chevron-left"></span>
-    </div>
-    <div class="left">
-        <label>Muzyka</label>
-        {% block content %}{% endblock %}
-        <hr>
-        <label>Zarządzanie muzyką</label>
-        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj utwór</a>
-        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj bibliotekę</a>
-        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj playlistę</a>
-        <hr>
-         <label>Moja playlista</label>
-    </div>
-  <!--<div class="playlists">
-     <label class="wysrodkuj">PLAYLISTA</label>
-    <p class="editions"> Example</p>
-    
-    <div class="newPlaylist">
-    <a href="/">
-        <span class="glyphicon glyphicon-plus"></span>
-        Nowa playlista</a>
-    </div>
-    </div>-->
-</div>
 <div id="sidSearch" class="sidenav3" style="width:0;">
     <p>Dane</p>
 </div>
@@ -52,8 +12,12 @@
 <div class="topnav">
         <div class="row2">
             <div class="column21">
-                <img class="logo" src="../static/yamo3.png" align="left"/>
+                <img class="logo" src="../static/yamo3.jpg" align="left"/>
             </div>
+            <div class="columbutton">
+                    {% block content %}{% endblock %}
+            </div>
+            {% block head %}{% endblock %}
             <div class="column22">
                 <div class="search-container">
                     <input type="text" onkeyup="searchGlobal();" id="myInput2" placeholder="Search">
@@ -61,8 +25,6 @@
                     </input>
                 </div>
             </div>
-        
-                {% block head %}{% endblock %}
     </div>
 </div>
 {% block content_body %}{% endblock %}

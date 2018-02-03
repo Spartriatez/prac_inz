@@ -1,0 +1,81 @@
+{% extends "mainMenu.html" %}
+
+{% block content %}
+    <a href="/albums">Albumy</a>
+    <a class="active" href="/repositories">Repozytoria</a>
+    <a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
+
+{% endblock %}
+{% block content_body %}
+<form action="/repositories?action" method="post">
+    <div class="main3">
+        <br>
+        <br>
+        <br>
+
+                <table class="table">
+                    <tr>
+                    {% for i in range(warning|length) %}
+                        <td><font color="red">{{ warning[i] }}</font><br></td>
+                    {% endfor %}
+                    </tr>
+                    <tr>
+                        <td><a>Pełna ścieżka nowego repozytorium</a></td>
+                        <td colspan="2"><a>Nazwa</a></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" name="path" value=""></input></td>
+                        <td><input type="text" name="remote_name" value=""></input></td>
+                        <td><button class="btn btn-lg btn-primary">
+                            <span class="glyphicon glyphicon-plus"></span>
+                                Dodaj
+                            </button></td>
+                    </tr>
+                    </table>
+
+        <br>
+        <br>
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <td rowspan="2">Nazwa</td>
+                        <td rowspan="2">Ścieżka</td>
+                        <td rowspan="2">Automatyczne<br>pobieranie</td>
+                        <td rowspan="2">Automatyczne<br> wysyłanie</td>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for category in range(repos_packed|length) %}
+                    {% for i in range(repos_packed[category]|length) %}
+                        <tr>
+                                <td>{{ repos_packed[category][i].name }}</td>
+                                <td>{{ repos_packed[category][i].path }}</td>
+                                {% if category == 3 or category == 1 %}
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" checked></td>
+                                {% else %}
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" ></td>
+                                {% endif %}
+                                {% if category == 3 or category == 2 %}
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember" checked></td>
+                                {% else %}
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember"</td>
+                                {% endif %}
+                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
+                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
+                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
+
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        <br>
+        <br>
+        <input type="submit" class="btn btn-lg btn-success" value="Zapisz zmiany"></input>
+</form>
+
+
+
+
+    </div>
+{% endblock %}

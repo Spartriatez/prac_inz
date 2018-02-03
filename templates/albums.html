@@ -1,11 +1,8 @@
 {% extends "mainMenu.html" %}
 {% block content %}
 <a class="active" href="/">Albumy</a>
-<a href="/artists">Artyści</a>
-<a href="/songs">Utwory</a>
-       <!-- <a href="/years">Rok produkcji</a>
-        <a href="/songs">Muzyka</a>
-        <a href="/files_editions">Edycja plików</a>-->
+<a  href="/repositories">Repozytoria</a>
+<a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
 {% endblock %}
 {% block head %}
 <div id="boxed" class="column2 pointer" style="display:block">
@@ -14,11 +11,9 @@
             <div class="dropdown">
                 <span class="glyphicon glyphicon-option-vertical"></span>
                     <div class="dropdown-content">
-                        <span id="0" onclick="sortAlb(this.id);" class="active">A-Z</span>
-                        <span id="1" onclick="sortAlb(this.id);" class="">Artyści</span>
-                        <span id="2" onclick="sortAlb(this.id);" class="">Roku</span>
-                        <!--<span id="3" onclick="sortAlb(this.id);" class="">Z-A</span>-->
-                        <!--<span id="3" onclick="listblock('list','blocks',this.id)" class="">Dowolne</span>-->
+                        <span id="0" onclick="sortAlb(this.id);" class="widthspan active">A-Z</span>
+                        <span id="1" onclick="sortAlb(this.id);" class="widthspan">Artyści</span>
+                        <span id="2" onclick="sortAlb(this.id);" class="widthspan">Roku</span>
                     </div>
             </div>
 </div>
@@ -26,265 +21,149 @@
 
 {% block content_body %}
 
+<div id="local2" class="slh" style="display:block">
+    <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
+</div>
+
+<div id="local" class="sls" style="width:0;">
+    <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
+    <input type="text" onkeyup="searchLocal();" id="myInput" placeholder="Search">
+    <i class="glyphicon glyphicon-search colores"></i>
+    </input>
+</div>
 
 <div id="menu1" class="main2" style="display: block;">
-	
+
     <div id="box0" class="container" style="display: block;">
         <div id="rows2" class="row">
-            {% for i in range(alphabets|length) %}
-                {% for j in range(alphabets[i].path|length) %}
-                    {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
+            {% for i in range(albums|length) %}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
+                            <div class="dummy"><img class="my_pages" src={{ albums[i][1] }}/></div>
+                            {% if albums[i][0].album == '' %}
+                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="thumbnail purple">Nieznany album</a>
+                            {% else %}
+                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="albums[i][0].id" class="thumbnail purple">{{ albums[i][0].album  }}</a>
+                            {% endif %}
                         </div>
-                        {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
-                            <div class="col-md-2 col-sm-4">
-                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                            </div>
-                        {% else %}
-                            <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                            <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                        </div>
-                        {% endif %}
-                {% endfor %}
             {% endfor %}
         </div>
     </div>
-      
- <!--   <div id="box1" class="container" style="display: none;">
-        <div class="row">
-            {% for i in range(alphabets|length-1,-1,-1) %}
-                {% for j in range(alphabets[i].path|length) %}
-                    {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
-                        <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
-                        </div>
-                        {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
-                            <div class="col-md-2 col-sm-4">
-                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                            </div>
-                        {% else %}
-                            <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                            <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                        </div>
-                        {% endif %}
-                {% endfor %}
-            {% endfor %}
-            </div>
-    </div>
-        -->
+
     <div id="box1" class="container" style="display: none;">
         <div id="rows2" class="row">
             {% for i in range(artists|length) %}
-                {% for j in range(artists[i].path|length) %}
-                    {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
+                            <div class="dummy"><img class="my_pages" src={{ artists[i][1] }}/></div>
+                            <a href={{ "/details?id=" + artists[i][0].id|string }} id="artists[i][0].id" class="thumbnail purple">{{ artists[i][0].album }}</a>
                         </div>
-                        {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
-                            <div class="col-md-2 col-sm-4">
-                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
-                            </div>
-                        {% else %}
-                            <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
-                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
-                        </div>
-                        {% endif %}
-                {% endfor %}
             {% endfor %}
-            </div>
+        </div>
     </div>
-        
+
     <div id="box2" class="container" style="display: none;">
         <div id="rows2" class="row">
             {% for i in range(years|length) %}
-                {% for j in range(years[i].path|length) %}
-                    {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
                         <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                            <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
+                            <div class="dummy"><img class="my_pages" src={{ years[i][1] }}/></div>
+                            <a href={{ "/details?id=" + years[i][0].id|string }} id="years[i][0].id" class="thumbnail purple">{{ years[i][0].album }}</a>
                         </div>
-                        {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
-                            <div class="col-md-2 col-sm-4">
-                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
-                            </div>
-                        {% else %}
-                            <div class="col-md-2 col-sm-4">
-                            <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
-                            <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
-                        </div>
-                        {% endif %}
-                {% endfor %}
             {% endfor %}
-            </div>
+        </div>
     </div>
-        
+
+
+
     <div id="list0" class="container" style="display: none;">
-         {% for i in range(alphabets|length) %}
-                <br>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>{{listletters[i]}}<th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                  <div id="rows2" class="row">
-                                    {% for j in range(alphabets[i].path|length) %}
-                                        {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
-                                            <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
-                                            </div>
-                                            {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
-                                                <div class="col-md-2 col-sm-4">
-                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                    <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                                                </div>
-                                            {% else %}
-                                                <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                                                <a href="#{{alphabets[i].ids[j]}}" id="{{alphabets[i].ids[j]}}" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                                            </div>
-                                            {% endif %}
-                                    {% endfor %}
-                                </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-        {% endfor %}
-    </div>
-        
-  <!--  <div id="list1" class="container" style="display: none;">
-        {% for i in range(alphabets|length-1,-1,-1) %}
-                <br>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{listletters[i]}}<th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="row">
-                                    {% for j in range(alphabets[i].path|length) %}
-                                        {% if alphabets[i].path[j] == 'brak' and alphabets[i].album[j]=='Nieznany album'%}
-                                            <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">Nieznany album</a>
-                                            </div>
-                                            {% elif alphabets[i].album[j]!='Nieznany album' and alphabets[i].path[j] == 'brak' %}
-                                                <div class="col-md-2 col-sm-4">
-                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                    <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                                                </div>
-                                            {% else %}
-                                                <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="{{alphabets[i].path[j]}}"/></div>
-                                                <a href="#x" id="lines" class="thumbnail purple">{{alphabets[i].album[j]}}</a>
-                                            </div>
-                                        {% endif %}
-                                {% endfor %}
-                            </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-        {% endfor %}
-    </div>-->
-        
-    <div id="list1" class="container" style="display: none;">
-        {% for i in range(artists|length) %}
          <br>
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{artists[i].artist}}<th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+                    {% for i in range(albums|length) %}
+                        {% if i == 0 %}
+                            <thead>
+                                    <tr>
+                                        <th>{{albums[i][0].album.0}}<th>
+                                    </tr>
+                                </thead>
+                        {% elif albums[i][0].album.0 != albums[i-1][0].album.0 %}
+                                <thead>
+                                    <tr>
+                                        <th>{{albums[i][0].album.0}}<th>
+                                    </tr>
+                                </thead>
+                        {% endif %}
                             <td>
                                 <div id="rows2" class="row">
-                                {% for j in range(artists[i].path|length) %}
-                                    {% if artists[i].path[j] == 'brak' and artists[i].album[j]==''%}
                                         <div class="col-md-2 col-sm-4">
-                                            <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
+                                            <div class="dummy"><img class="my_pages" src="{{ albums[i][1] }}"/></div>
+                                            <a href={{ "/details?id=" + albums[i][0].id|string }} id="{{ albums[i][0].id }}" class="thumbnail purple">{{ albums[i][0].album }}</a>
                                         </div>
-                                        {% elif artists[i].album[j]!='' and artists[i].path[j] == 'brak' %}
-                                            <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
-                                            </div>
-                                        {% else %}
-                                            <div class="col-md-2 col-sm-4">
-                                            <div class="dummy"><img class="my_pages" src="{{artists[i].path[j]}}"/></div>
-                                            <a href="#{{artists[i].ids[j]}}" id="{{artists[i].ids[j]}}" class="thumbnail purple">{{artists[i].album[j]}}</a>
-                                        </div>
-                                        {% endif %}
-                                {% endfor %}
                                 </div>
                             </td>
-                        </tr>
-                    </tbody>
+                    {% endfor %}
                 </table>
-        {% endfor %}
     </div>
-        
-    <div id="list2" class="container" style="display: none;">
-         {% for i in range(years|length) %}
+
+
+
+    <div id="list1" class="container" style="display: none;">
          <br>
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>{{years[i].year}}<th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            <tr>
-                                <td>
-                                    <div id="rows2" class="row">
-                                    {% for j in range(years[i].path|length) %}
-                                        {% if years[i].path[j] == 'brak' and years[i].album[j]==''%}
-                                            <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">Nieznany album</a>
-                                            </div>
-                                            {% elif years[i].album[j]!='' and years[i].path[j] == 'brak' %}
-                                                <div class="col-md-2 col-sm-4">
-                                                    <div class="dummy"><img class="my_pages" src="../static/images/image-not-found.jpg"/></div>
-                                                    <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
-                                                </div>
-                                            {% else %}
-                                                <div class="col-md-2 col-sm-4">
-                                                <div class="dummy"><img class="my_pages" src="{{years[i].path[j]}}"/></div>
-                                                <a href="#{{years[i].ids[j]}}" id="{{years[i].ids[j]}}" class="thumbnail purple">{{years[i].album[j]}}</a>
-                                            </div>
-                                            {% endif %}
-                                    {% endfor %}
-                                    </div>
+                    {% for i in range(artists|length) %}
+                        {% if i == 0 %}
+                            <thead>
+                                    <tr>
+                                        <th>{{artists[i][0].albumartist}}<th>
+                                    </tr>
+                                </thead>
+                        {% elif artists[i][0].albumartist != artists[i-1][0].albumartist %}
+                                <thead>
+                                    <tr>
+                                        <th>{{artists[i][0].albumartist}}<th>
+                                    </tr>
+                                </thead>
+                        {% endif %}
+                            <td>
+                                <div id="rows2" class="row">
+                                        <div class="col-md-2 col-sm-4">
+                                            <div class="dummy"><img class="my_pages" src="{{ artists[i][1] }}"/></div>
+                                            <a href={{ "/details?id=" + artists[i][0].id|string }} id="{{ artists[i][0].id }}" class="thumbnail purple">{{ artists[i][0].album }}</a>
+                                        </div>
+                                </div>
                             </td>
-                        </tr>
-                    </tbody>
+                    {% endfor %}
                 </table>
-        {% endfor %}
     </div>
-        
+
+    <div id="list2" class="container" style="display: none;">
+
+         <br>
+                <table class="table">
+                    {% for i in range(years|length) %}
+                        {% if i == 0 %}
+                            <thead>
+                                    <tr>
+                                        <th>{{years[i][0].year}}<th>
+                                    </tr>
+                                </thead>
+                        {% elif years[i][0].year != years[i-1][0].year %}
+                                <thead>
+                                    <tr>
+                                        <th>{{years[i][0].year}}<th>
+                                    </tr>
+                                </thead>
+                        {% endif %}
+                            <td>
+                                <div id="rows2" class="row">
+                                        <div class="col-md-2 col-sm-4">
+                                            <div class="dummy"><img class="my_pages" src="{{ artists[i][1] }}"/></div>
+                                            <a href={{ "/details?id=" + years[i][0].id|string }} id="{{ years[i][0].id }}" class="thumbnail purple">{{ years[i][0].album }} </a>
+                                        </div>
+                                </div>
+                            </td>
+                    {% endfor %}
+                </table>
+
+    </div>
+
     <div id="searching" class="container" style="display: none;">
         <div id="rows" class="row">
             {% for i in range(alphabets|length) %}

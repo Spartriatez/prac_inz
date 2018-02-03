@@ -1,0 +1,93 @@
+{% extends "mainMenu.html" %}
+
+{% block content %}
+        <a class="active" href="/">Albumy</a>
+        <a  href="/repositories">Repozytoria</a>
+        <a class="glyphicon glyphicon-plus pos" href="/import">Dodaj muzykę</a>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content_body %}
+<div class="main4">
+    <br>
+        {% set detailslen = details|length %}
+        {% set albkeylen = dictionary.language_album|length %}
+        {% set itemkeylen = dictionary.language_item|length %}
+    {% if expanded == 'true' %}
+        <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+    {% else %}
+        <form action={{"/details?"+id_arg+"&remotes=saved"}} method="post">
+    {% endif %}
+    <br>
+    {% if details|length == 1 %}
+            {% for name in remotes[0] %}
+                <label><input name="{{name}}" type="checkbox" checked><font color="green">{{name}}</font></label>
+            {% endfor %}
+            {% for name in remotes[1] %}
+                <label><input name="{{name}}" type="checkbox"><font color="grey">{{name}}</font></label>
+            {% endfor %}
+            <button class="btn btn-lg btn-primary" type="submit">Zapisz</button>
+        </form>
+    {% endif %}
+    <hr />
+    <br>
+    {% if expanded == 'true' %}
+        <form action={{"/details?"+id_arg+"&expand=true&action=edit"}} method="post">
+    {% else %}
+        <form action={{"/details?"+id_arg+"&action=edit"}} method="post">
+    {% endif %}
+            {% for i in range(details|length) %}
+                <img src={{ details[i][1] }} alt="Album cover"> <br>
+                <br><hr /><br>
+                <table cass = "table">
+                    {% for j in range(albkeylen) %}
+                        <tr>
+                            <td> {{ dictionary.language_album[j] }} </td>
+                            <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' /></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <br><hr /><br>
+                <table class="table">
+                    <tr>
+                    {% for k in range(itemkeylen) %}
+                        <td> {{ dictionary.language_item[k] }} </td>
+                    {% endfor %}
+                    </tr>
+                    {%for j in range(details[i][2]|length) %}
+                    <tr>
+                        {% for k in range(itemkeylen) %}
+                            {% if dictionary.item_keys[k] == 'path' %}
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]].decode('UTF-8') }}' /></td>
+                            {% elif dictionary.item_keys[k] == 'length' and details[i][2][j][dictionary.item_keys[k]]|int % 60 < 10 %}
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:0{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' /></td>
+                            {% elif dictionary.item_keys[k] == 'length' %}
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' /></td>
+                            {% else %}
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+
+
+
+                </table>
+            {% endfor %}
+
+            <button class="btn btn-lg btn-primary" type="submit">Zapisz zmiany</button>
+        </form>
+    <br><hr /><br>
+    {% if expanded == 'true' %}
+        <form class="btn btn-lg btn-success" action={{"/details?"+id_arg}} method="post">
+            <button type="submit">Ukryj szczegóły</button>
+        </form>
+    {% else %}
+        <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
+            <button class="btn btn-lg btn-success" type="submit">Pokaż szczegóły</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}
