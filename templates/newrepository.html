@@ -7,12 +7,12 @@
 
 {% endblock %}
 {% block content_body %}
+<div class="main3">
 <form action="/repositories?action" method="post">
-    <div class="main3">
         <br>
         <br>
         <br>
-
+        <div class="tableContainer-1">
                 <table class="table">
                     <tr>
                     {% for i in range(warning|length) %}
@@ -24,16 +24,16 @@
                         <td colspan="2"><a>Nazwa</a></td>
                     </tr>
                     <tr>
-                        <td><input type="text" name="path" value=""></input></td>
-                        <td><input type="text" name="remote_name" value=""></input></td>
+                        <td><input type="text" name="path" class="whos" value=""></input></td>
+                        <td><input type="text" class="whos" name="remote_name" value=""></input></td>
                         <td><button class="btn btn-lg btn-primary">
                             <span class="glyphicon glyphicon-plus"></span>
                                 Dodaj
                             </button></td>
                     </tr>
-                    </table>
-
-        <br>
+                </table>
+        </div>
+      <br>
         <br>
         <table class="table table-hover">
                 <thead>
@@ -42,6 +42,7 @@
                         <td rowspan="2">Ścieżka</td>
                         <td rowspan="2">Automatyczne<br>pobieranie</td>
                         <td rowspan="2">Automatyczne<br> wysyłanie</td>
+                        <td colspan="3"/>
                     </tr>
                 </thead>
                 <tbody>

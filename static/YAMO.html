@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>YAMO</title>
+     <link rel="stylesheet" type="text/css" href="YAMO_pliki/bootstrap2.css">
+     <link rel="stylesheet" type="text/css" href="YAMO_pliki/bootstrap3.css">
+      <link rel="stylesheet" type="text/css" href="YAMO_pliki/bootstrap.css">
+      <link rel="stylesheet" type="text/css" href="YAMO_pliki/styles.css">
+      <link rel="stylesheet" type="text/css" href="YAMO_pliki/styles2.css">
+      <link rel="stylesheet" type="text/css" href="YAMO_pliki/table-style.css">
+       <script type="text/javascript" charset="utf-8" src="YAMO_pliki/sortTable.js"></script>
+       <script type="text/javascript" charset="utf-8" src="YAMO_pliki/menu.js"></script>
+        <script type="text/javascript" charset="utf-8" src="YAMO_pliki/sorts.js"></script>
+        <script type="text/javascript" charset="utf-8" src="YAMO_pliki/searchGlobal.js"></script>
+        <script type="text/javascript" charset="utf-8" src="YAMO_pliki/searchLocal.js"></script>
+      <link href="http://127.0.0.1:5000/static/stylesheets/yamo2.ico" rel="shortcut icon">
+      </head>
+<body>
+
+
+<div id="sid2" class="sidenav2" style="display:block">
+    <span onclick="openNav()" class="glyphicon glyphicon-chevron-right"></span>
+</div>
+
+<div id="local2" class="slh" style="display:block">
+    <span onclick="openNavSL()" class="glyphicon glyphicon-chevron-left"></span>
+</div>
+
+<div id="local" class="sls" style="width:0;">
+    <span onclick="closeNavSL()" class="glyphicon glyphicon-chevron-right"></span>
+    <input onkeyup="searchLocal();" id="myInput" placeholder="Search" type="text">
+    <i class="glyphicon glyphicon-search colores"></i>
+    
+</div>
+
+<div id="sid" class="sidenav" style="width:0;">
+    <div class="right">
+     <span onclick="closeNav()" class="glyphicon glyphicon-chevron-left"></span>
+    </div>
+    <div class="left">
+        <label>Muzyka</label>
+        
+    <label>TWOJA BIBLIOTEKA</label>
+        <a href="http://127.0.0.1:5000/albums">Albumy</a>
+        <a href="http://127.0.0.1:5000/artists">Artyści</a>
+        <a href="http://127.0.0.1:5000/years">Rok produkcji</a>
+        <a href="http://127.0.0.1:5000/songs">Muzyka</a>
+        <a class="active" href="http://127.0.0.1:5000/files_editions">Edycja plików</a>
+
+        <hr>
+        <label>Zarządzanie muzyką</label>
+        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj utwór</a>
+        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj bibliotekę</a>
+        <a href="#" class="glyphicon glyphicon-plus pos">Dodaj playlistę</a>
+        <hr>
+         <label>Moja playlista</label>
+    </div>
+  <!--<div class="playlists">
+     <label class="wysrodkuj">PLAYLISTA</label>
+    <p class="editions"> Example</p>
+    
+    <div class="newPlaylist">
+    <a href="/">
+        <span class="glyphicon glyphicon-plus"></span>
+        Nowa playlista</a>
+    </div>
+    </div>-->
+</div>
+<div id="sidSearch" class="sidenav3" style="width:0;">
+    <p>Dane</p>
+</div>
+
+<div id="searchMenu" class="main3 animate" style="display: none;">
+    <p>Searching</p>
+</div>
+<div class="topnav">
+        <div class="row2">
+            <div class="column21">
+                <img class="logo" src="YAMO_pliki/yamo3.jpg" align="left">
+            </div>
+            <div class="column22">
+                <div class="search-container">
+                    <input onkeyup="searchGlobal();" id="myInput2" placeholder="Search" type="text">
+                        <i class="glyphicon glyphicon-search colores"></i>
+                    
+                </div>
+            </div>
+        
+                
+    </div>
+</div>
+
+    <div class="main">
+        <br>
+        <br>
+        <br>
+            <form action="/repositories" method="post">
+                <table class="table">
+                    <tbody><tr>
+                    
+                    </tr>
+                    <tr>
+                        <td><a>Pełna ścieżka nowego repozytorium</a></td>
+                        <td><a>Nazwa repozytorium</a></td>
+                    </tr>
+                    <tr>
+                        <td><input name="path" type="text"></td>
+                        <td><input name="remote_name" type="text"></td>
+                        <td><input value="Dodaj" type="submit"></td>
+                    </tr>
+                    </tbody></table>
+                    <table class="sync">
+                    <tbody><tr>
+                        <td></td>
+                        <td>Automatycznie</td>
+                    </tr>
+                    <tr>
+                        <td><input name="get" value="1" checked="checked" type="checkbox">
+                         <a>Pobierz muzykę z nowego repozytorium</a></td>
+                        <td><input name="autoget" value="1" type="checkbox"></td>
+
+                    </tr>
+                    <tr>
+                        <td><input name="push" value="1" type="checkbox">
+                        <a>Wyślij muzykę na nowe repozytorium</a></td>
+                        <td><input name="autopush" value="1" type="checkbox"></td>
+                    </tr>
+                    </tbody></table>
+            </form>
+        <br><br><table class="repostable">
+            
+            
+
+            <tbody><tr>
+                <td><input name="remember" value="1" type="checkbox">Zautomatyzuj</td>
+            </tr>
+            <tr>
+                <td>Nazwa</td>
+                <td>Automatyczne pobieranie</td>
+                <td>Automatyczne wysyłanie</td>
+            </tr>
+            
+                
+            
+                
+            
+                
+                    <tr>
+                        <form action="/repositoriesaction" method="post"></form>
+                            <td>TestRepo3</td>
+                            
+                            <td>nie</td>
+                            
+                            
+                            <td>tak</td>
+                            
+                            <td><input name="TestRepo3" value="Pobierz" type="submit"></td>
+                            <td><input name="TestRepo3" value="Wyślij" type="submit"></td>
+                        
+                    </tr>
+                
+                    <tr>
+                        <form action="/repositoriesaction" method="post"></form>
+                            <td>asda</td>
+                            
+                            <td>nie</td>
+                            
+                            
+                            <td>tak</td>
+                            
+                            <td><input name="asda" value="Pobierz" type="submit"></td>
+                            <td><input name="asda" value="Wyślij" type="submit"></td>
+                        
+                    </tr>
+                
+            
+                
+                    <tr>
+                        <form action="/repositoriesaction" method="post"></form>
+                            <td>TestRemote</td>
+                            
+                            <td>nie</td>
+                            
+                            
+                            <td>nie</td>
+                            
+                            <td><input name="TestRemote" value="Pobierz" type="submit"></td>
+                            <td><input name="TestRemote" value="Wyślij" type="submit"></td>
+                        
+                    </tr>
+                
+            
+        </tbody></table>
+
+
+
+
+    </div>
+
+
+
+</body></html>

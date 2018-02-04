@@ -15,7 +15,7 @@
     <form action="/edit_data" method="post">
         {% for i in range(details|length) %}
             <img src={{ details[i][1] }} alt="Album cover"> <br>
-            <table cass = "table">
+            <table class = "table">
                 <tr>
                     <td> album: </td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ details[i][0].album }}' /></td>
@@ -52,7 +52,7 @@
                     {% if item.length|int % 60 < 10 %}
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:0{{item.length|int % 60}}' /></td>
                     {% else %}
-                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:{{item.length|int % 60}}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ (item.length|int / 60)|int }}:{{item.length|int % 60}}'/></td>
                     {% endif %}
                 </tr>
                 {% endfor %}

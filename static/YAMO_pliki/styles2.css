@@ -37,34 +37,3 @@
    pointer-events: none;
    cursor: default;
 }
-.text{
-    font-size: 18px;
-    text-align:center;
-    color:black;
-}
-
-.tableContainer-1 {
-    padding-left: 15%;
-    padding-right: 15%;
-}
-
-.whos{
-    background-color: #DCDCDC;
-}
-.left-page{
-    float:left;
-    padding-bottom: 30px;
-}
-.right-page{
-     float:left;
-     padding-left: 5%;
-     padding-bottom: 30px;
-}
-
-.topbottom{
-    padding-top: 10px;
-}
-
-.color-input{
-    background-color: #DCDCDC;
-}
