@@ -45,7 +45,7 @@
         <!-- tytuł, artysta, rodzaj, czas trwania-->
                 {% for item in details[i][2] %}
                 <tr>
-                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.id }}' /></td>
+                    <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.id }}' style="width: 30px;" /></td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.title }}' /></td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.artist }}' /></td>
                     <td><input type="text"  name={{ loop.index * 5 - 5 }} value='{{ item.genre }}' /></td>
