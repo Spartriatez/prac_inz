@@ -55,8 +55,8 @@ def get_covers(albumlist):
                 remove(imagespath+newCoverPath)
             copy2(artpath, imagespath+newCoverPath)
             paths.append('..'+newCoverPath)
-        # elif path.exists(imagespath+newCoverPath):
-        #     paths.append('..'+newCoverPath)
+        elif path.exists(imagespath+newCoverPath):
+            paths.append('..'+newCoverPath)
         else:
             paths.append(nonepath)
 
