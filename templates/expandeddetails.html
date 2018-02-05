@@ -15,6 +15,7 @@
         {% set detailslen = details|length %}
         {% set albkeylen = dictionary.language_album|length %}
         {% set itemkeylen = dictionary.language_item|length %}
+    
     {% if expanded == 'true' %}
         <form action={{"/details?"+id_arg+"&expand=true"}} method="post">
     {% else %}
@@ -64,9 +65,11 @@
                             {% if dictionary.item_keys[k] == 'path' %}
                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]].decode('UTF-8') }}'/></td>
                             {% elif dictionary.item_keys[k] == 'length' and details[i][2][j][dictionary.item_keys[k]]|int % 60 < 10 %}
-                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:0{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' /></td>
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:0{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' style="width: 100px;"/></td>
                             {% elif dictionary.item_keys[k] == 'length' %}
-                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' readonly class="color-input"/></td>
+                            <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ (details[i][2][j][dictionary.item_keys[k]]|int / 60)|int }}:{{details[i][2][j][dictionary.item_keys[k]]|int % 60}}' readonly class="color-input" style="width: 100px;"/></td>
+                            {% elif dictionary.item_keys[k] == 'track' or dictionary.item_keys[k] == 'album_id' or dictionary.item_keys[k] == 'language'%}
+                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]]}} '  style="width: 60px;"/></td>
                             {% else %}
                             <td><input type="text"  name={{ i*albkeylen + itemkeylen * (details[i][3] - details[i][2]|length) + albkeylen + j * itemkeylen +k }} value='{{ details[i][2][j][dictionary.item_keys[k]] }}' /></td>
                             {% endif %}
@@ -75,12 +78,12 @@
                     {% endfor %}
                 </table>
             {% endfor %}
-    
-            <button class="btn btn-lg btn-primary" type="submit">Zapisz zmiany</button>
+                        
+            <button type="submit">Zapisz zmiany</button>
         </form>
     <br><hr /><br>
     {% if expanded == 'true' %}
-        <form class="btn btn-lg btn-success" action={{"/details?"+id_arg}} method="post">
+        <form action={{"/details?"+id_arg}} method="post">
             <button type="submit">Ukryj szczegóły</button>
         </form>
     {% else %}
@@ -88,5 +91,7 @@
             <button class="btn btn-lg btn-success" type="submit">Pokaż szczegóły</button>
         </form>
     {% endif %}
+
+     
 </div>
 {% endblock %}

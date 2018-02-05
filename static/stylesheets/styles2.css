@@ -49,6 +49,7 @@
 }
 
 .whos{
+    width: 300px;
     background-color: #DCDCDC;
 }
 .left-page{
@@ -61,10 +62,76 @@
      padding-bottom: 30px;
 }
 
-.topbottom{
-    padding-top: 10px;
+
+.main3 input, .contact_form textarea { 
+    border:1px solid #aaa;
+    box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
+    border-radius:2px;
+}
+.main3 input:focus, .main3 textarea:focus {
+    background: #fff; 
+    border:1px solid #555; 
+    box-shadow: 0 0 3px #aaa; 
 }
 
-.color-input{
-    background-color: #DCDCDC;
+.inputeffect, .main3 button {
+    background-color: #68b12f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+    background: -webkit-linear-gradient(top, #68b12f, #50911e);
+    background: -moz-linear-gradient(top, #68b12f, #50911e);
+    background: -ms-linear-gradient(top, #68b12f, #50911e);
+    background: -o-linear-gradient(top, #68b12f, #50911e);
+    background: linear-gradient(top, #68b12f, #50911e);
+    border: 1px solid #509111;
+    border-bottom: 1px solid #5b992b;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    box-shadow: inset 0 1px 0 0 #9fd574;
+    -webkit-box-shadow: 0 1px 0 0 #9fd574 inset ;
+    -moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+    -ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+    -o-box-shadow: 0 1px 0 0 #9fd574 inset;
+    color: white;
+    font-weight: bold;
+    padding: 6px 20px;
+    text-align: center;
+    text-shadow: 0 -1px 0 #396715;
+}
+.mySpan{
+    padding-top:12px;
+    color: white;
+    font-size:18px;
+}
+
+span:hover{
+    color:gray;
+}
+.topnav2 {
+    width:100%;
+    top:65px;
+    height:65px;
+    position: fixed;
+    overflow: hidden;
+    background-color: black;
+}
+.topnav2 span{
+    padding-top:12px;
+    color: white;
+    font-size:18px;
+}
+.topnav2 span:hover{
+    color:gray;
+}
+.another{
+    padding-top:10px;
+    padding-left:100px;
+    float:left;
+}
+.another2{
+    padding-top:10px;
+    padding-right:20px;
+    float:right;
 }

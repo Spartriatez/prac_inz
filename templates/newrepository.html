@@ -25,8 +25,8 @@
                     </tr>
                     <tr>
                         <td><input type="text" name="path" class="whos" value=""></input></td>
-                        <td><input type="text" class="whos" name="remote_name" value=""></input></td>
-                        <td><button class="btn btn-lg btn-primary">
+                        <td><input type="text" name="remote_name" value=""></input></td>
+                        <td><button>
                             <span class="glyphicon glyphicon-plus"></span>
                                 Dodaj
                             </button></td>
@@ -61,9 +61,9 @@
                                 {% else %}
                                 <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember"</td>
                                 {% endif %}
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
-                                <td><input type="submit" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
+                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
 
                         </tr>
                     {% endfor %}
@@ -72,7 +72,7 @@
             </table>
         <br>
         <br>
-        <input type="submit" class="btn btn-lg btn-success" value="Zapisz zmiany"></input>
+        <input type="submit" class="inputeffect" value="Zapisz zmiany"></input>
 </form>
 
 

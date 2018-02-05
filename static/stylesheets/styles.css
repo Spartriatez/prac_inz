@@ -81,18 +81,16 @@ label {
 
 .main2 {
     height:100%;
-    background-color:gray;
+    background-color:#303030;
     padding-bottom:20px;
     font-size: 28px; /* Increased text to enable scrolling */
     padding: 30px;
     overflow:scroll;
 }
-
+*:focus {outline: none;}
 th,tr,td{
     color: white;
 }
-
-
 .topnav {
     top: 0;
     width:100%;
@@ -347,7 +345,7 @@ hr {
     padding-bottom:20px;
     height:100%;
     overflow:scroll;
-    background-color:gray;
+    background-color:#303030;
     
 }
 
