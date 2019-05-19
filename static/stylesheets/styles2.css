@@ -129,8 +129,11 @@ span:hover{
     color:gray;
 }
 .another{
-    padding-top:10px;
-    padding-left:100px;
+    float:left;
+}
+
+.another form{
+    padding-left: 10px;
     float:left;
 }
 .another2{

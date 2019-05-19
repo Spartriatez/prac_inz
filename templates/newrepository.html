@@ -3,12 +3,18 @@
 {% block content %}
     <a href="/albums">Albumy</a>
     <a class="active" href="/repositories">Repozytoria</a>
-    <a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>
+    <!--<a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>-->
+    <a  href="/startImporting"><font color="OldLace">Dodaj muzykę</font></a>
 
 {% endblock %}
 {% block content_body %}
-<div id="import" class="topnav2" style="display:none;">
+<!--<div id="import" class="topnav2" style="display:none;">
     <div class="another">
+        <form action="/returnPathname">
+            <button class="btn btn-lg btn-primary">
+            Prześlij ścieżkę </button>
+            </button>
+        </form>
         <form action="/startImporting" method="post">
             <input type="text" name="Path"></input>
             <button class="btn btn-lg btn-primary" href="/edycja/dodaj">
@@ -19,10 +25,32 @@
     <div class="another2">
         <span  onclick="closeImport()"class="glyphicon glyphicon-remove"/>
     </div>
-</div>
+</div>-->
 <div class="main3">
-<form action="/repositories?action" method="post">
+<!--<form action="/repositories?action" method="post">-->
         <br>
+        <br>
+        <br>
+        <div class="tableContainer-1">
+                <table class="table table-dark">
+                    <tr>
+                        <td colspan="1"><a>Nazwa Hosta</a></td>
+                        <td colspan="1"><a>Nazwa Użytkownika</a></td>
+                        <!--<td colspan="2"><a>Nazwa repozytorium</a></td>-->
+                    </tr>
+                    <tr>
+                        <form action="/sshActions" action="" method="post" role="form">
+                        <td><input type="text" id="hostname" name="hostname" value=""></input></td>
+                        <td><input type="text" id="Username" name="username" value=""></input></td>
+                        <!--<td><input type="text" id="remote_name" name="remote_name" value=""></input></td>-->
+                        <td>
+
+                                <input type="submit" class="inputeffect" value="Połącz" />
+                        </td>
+                        </form>
+                    </tr>
+                </table>
+        </div>
         <br>
         <br>
         <div class="tableContainer-1">
@@ -33,20 +61,30 @@
                     {% endfor %}
                     </tr>
                     <tr>
-                        <td><a>Pełna ścieżka nowego repozytorium</a></td>
+                        <td colspan="2"><a>Pełna ścieżka nowego repozytorium</a></td>
                         <td colspan="2"><a>Nazwa</a></td>
                     </tr>
                     <tr>
-                        <td><input type="text" id="editbox" name="path" class="whos" value=""></input></td>
+                        <td>
+                            <form action="/returnPathname">
+                                <button class="btn btn-lg btn-primary">Prześlij ścieżkę </button>
+                            </form>
+                            <!-- <input type="text" id="editbox" name="path" class="whos" value=""></input>-->
+                        </td>
+                        <form action="/repositories?action" method="post">
+                        <td><input type="text" id="dirPath" name="path" value="{{ directory_path }}"></input></td>
                         <td><input type="text" id="editbox" name="remote_name" value=""></input></td>
-                        <td><button>
+                        <td>
+
+                            <button>
                             <span class="glyphicon glyphicon-plus"></span>
                                 Dodaj
-                            </button></td>
+                            </button>
+                        </td>
+                        </form>
                     </tr>
                 </table>
         </div>
-
     <br>
     <br>
     <br>
@@ -62,37 +100,39 @@
                     </tr>
                 </thead>
                 <tbody>
+                <form action="/repositories2?action" method="post">
                 {% for category in range(repos_packed|length) %}
                     {% for i in range(repos_packed[category]|length) %}
                         <tr>
-                                <td>{{ repos_packed[category][i].name }}</td>
+                               <td>{{ repos_packed[category][i].name }}</td>
                                 <td>{{ repos_packed[category][i].path }}</td>
                                 {% if category == 3 or category == 1 %}
-                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" checked></td>
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" checked/></td>
                                 {% else %}
-                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" ></td>
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}g" value="remember" /></td>
                                 {% endif %}
                                 {% if category == 3 or category == 2 %}
-                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember" checked></td>
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember" checked/></td>
                                 {% else %}
-                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember"</td>
+                                <td><input type="checkbox" name="{{ repos_packed[category][i].name }}s" value="remember"/></td>
                                 {% endif %}
-                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Pobierz"></input></td>
-                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyślij"></input></td>
-                                <td><input type="submit" class="inputeffect" name={{ repos_packed[category][i].name }} value="Wyczyść"></input></td>
-
+                                <td><input type="submit" class="inputeffect" name="{{ repos_packed[category][i].name }}-{{ repos_packed[category][i].path }}" value="Pobierz"></input></td>
+                                <td><input type="submit" class="inputeffect" name="{{ repos_packed[category][i].name}}-{{repos_packed[category][i].path }}" value="Wyślij"></input></td>
+                                <td><input type="submit" class="inputeffect" name="{{ repos_packed[category][i].name}}-{{repos_packed[category][i].path }}" value="Wyczyść"></input></td>
                         </tr>
                     {% endfor %}
                 {% endfor %}
+                </form>
                 </tbody>
             </table>
         <br>
         <br>
         <input type="submit" class="inputeffect" value="Zapisz zmiany"></input>
-</form>
-
-
-
-
+ </form>
+<br>
+<br>
+        <form action="/rBackup">
+            <input type="submit" class="inputeffect"  value="Przywróć" />
+        </form>
     </div>
 {% endblock %}

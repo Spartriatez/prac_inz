@@ -1,0 +1,62 @@
+{% extends "mainMenu.html" %}
+
+{% block content %}
+    <a href="/albums">Albumy</a>
+    <a class="active" href="/repositories">Repozytoria</a>
+    <!--<a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>-->
+    <a  href="/startImporting"><font color="OldLace">Dodaj muzykę</font></a>
+
+{% endblock %}
+
+{% block content_body %}
+<div class="main3">
+        <br>
+        <br>
+        <br>
+        <div class="tableContainer-1">
+                <table class="table table-dark">
+                    <tr>
+                        <td>Ścieżka</td>
+                    </tr>
+                    <tr>
+                        <!--<form action="/sshActions" action="" method="post" role="form">-->
+                        <td colspan="2"><input type="text" id="path" name="path" value="{{ ssh_path }}" size="70" readonly></input></td>
+                    </tr>
+                    <tr> <form action="/returnSshPathname">
+                                <td><button class="btn btn-lg btn-primary">Prześlij ścieżkę </button></td>
+                            </form>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                         <form action="/sshActions" action="" method="get" role="form">
+                        <td><input type="submit" class="inputeffect" value="Cofnij" />
+                        <input type="hidden" id="dirname" name="dirname" value=".." readonly></input>
+                        </td>
+                         </form>
+                    </tr>
+                </table>
+        </div>
+        <br>
+        <br>
+        <div class="tableContainer-1">
+                <table class="table table-striped table-hover table-dark center">
+                    <thead>
+                        <tr>
+                            <td rowspan="3">Foldery</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {%  for i in range(folders|length) %}
+                        <tr>
+                            <form action="/sshActions" action="" method="get" role="form">
+                            <td><input type="text" id="dirname" name="dirname" value="{{ folders[i] }}" readonly></input></td>
+                            <td>
+                                <input type="submit" class="inputeffect" value="Przejdź"/>
+                            </td>
+                            </form>
+                    {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+</div>
+{% endblock %}

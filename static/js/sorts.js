@@ -1,4 +1,5 @@
 function switching(id1,id2){
+    console.log("Hello");
     if(document.getElementById('searching').style.display=='block'){
         document.getElementById('searching').style.display='none';
         document.getElementById("local").style.width = "0px";

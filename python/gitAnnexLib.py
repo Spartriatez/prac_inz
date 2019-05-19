@@ -1,9 +1,11 @@
 from subprocess import PIPE, Popen, check_output
 import python.beetsCommands as beetsCommands
-
+from python.sshPath import split_data, Ssh
+import socket
+import getpass
+import os
 
 autopush_log = beetsCommands.get_server_path()+'/static/remote_repos/autopush'
-
 autoget_log = beetsCommands.get_server_path()+'/static/remote_repos/autoget'
 
 
@@ -18,15 +20,13 @@ class Repo:
         self.autogetting = []
         self.autopushing = []
         if local == 1:
-            self.annex_init()
+            self.annex_init(0)
             self.get_remotes()
-
-
-
 
     def get_names(self):
         for remote in self.remotes:
             if remote.name not in self.remote_names:
+
                 self.remote_names.append(remote.name)
         return self.remote_names
 
@@ -37,7 +37,7 @@ class Repo:
     """
     def get_remotes(self):
 
-
+        print("remotedssdsddsddsdssdsdsddsddsd "+self.path)
         p = Popen(['git', 'remote', '-v'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
         remote_names = []
         remote_paths = []
@@ -45,6 +45,7 @@ class Repo:
         autogetting_names = self.get_autogetting_names()
         for remote in p.stdout:
             remote_str = remote.decode('UTF-8')[:-1]
+            #print("sfadsgfdhgfhgdjhfkgjlk;hjjhdsfgdsghfjhkjjrseadfbghngjkgvcfh " + remote_str)
             find_tab = remote_str.find('\t')
             if find_tab:
                 remote_name = (remote_str[:find_tab])
@@ -72,35 +73,55 @@ class Repo:
     Wywołanie git init <ścieżka>
     0-repo initialized, 0-repo reinitialized, 1-fail
     """
-    def init(self):
-        cmdAnswer = check_output(['git','init', self.path]).decode('UTF-8')
+    def init(self,if_ssh):
+        if(if_ssh==1):
+            username,host,path=split_data(self.path)
+            password=[]
+            connection = Ssh(host, username, password)
+            command="cd "+path+" && git init "+path
+            cmdAnswer=connection.git_Command(command)
+        else:
+            cmdAnswer = check_output(['git','init', self.path]).decode('UTF-8')
+            print(cmdAnswer)
         if cmdAnswer[:32] == 'Initialized empty Git repository':
             if self.logs == 1: print('Repository initialized')
-            return 0
+            #return 0
         elif cmdAnswer[:37] == 'Reinitialized existing Git repository':
             if self.logs == 1: print('Repository reinitialized')
-            return 0
+            #return 0
         else:
             if self.logs == 1: print('Initialization failed')
-            return 1
+            #return 1
 
     """
     Wywołanie git annex init <ścieżka>
     0-repo initialized, 1-fail
     """
-    def annex_init(self):
-        self.init()
-        p = Popen(['git', 'annex', 'init', self.path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
-        for line in p.stdout:
-            line = line.decode('UTF-8')[:-1]
-            if "ok" in line:
-                if self.logs == 1:
+    def annex_init(self,if_ssh):
+        self.init(if_ssh)
+        if(if_ssh==1):
+            username, host, path = split_data(self.path)
+            password = []
+            connection = Ssh(host, username, password)
+            command = "cd " + path + " && git annex init "+path
+            cmdAnswer = connection.git_Command(command)
+            lines=cmdAnswer.split(" ")
+            for line in lines:
+                if("ok" in line):
                     print('Annex repository initialized')
-                    return 0
-            else: print(line)
-        if self.logs == 1:
-            print('Annex initialization failed')
-        return 1
+                else: print(line+" ")
+        else:
+            p = Popen(['git', 'annex', 'init', self.path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+            for line in p.stdout:
+                line = line.decode('UTF-8')[:-1]
+                if "ok" in line:
+                    if self.logs == 1:
+                        print('Annex repository initialized')
+                        #return 0
+                else: print(line)
+        #if self.logs == 1:
+            #print('Annex initialization failed')
+        #return 1
 
     """
     Dodanie nowego repozytorium. 
@@ -152,8 +173,15 @@ class Repo:
                 break
             else:
                 addedFiles.append(cmdAnswer[4:-3])
-        print()
         return addedFiles
+
+    def annex_ssh_add(self, username,host,path):
+        print('git annex add ' + path)
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path + " && git annex add ."
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdAnswer)
 
 
     def commit(self, message='adding files', path='.'):
@@ -204,6 +232,15 @@ class Repo:
 
         return 0
 
+    def annex_ssh_sync(self,username,host,path, remote):
+        print("annex synccccccccccc")
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path + " && git annex sync " + remote.name
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdErr)
+        print(cmdAnswer)
+        return 0
     """
     Wywołuje git annex get w celu pobrania plikow ktore nie znajduja sie w repozytorium
     """
@@ -216,6 +253,17 @@ class Repo:
         for line in p.stdout:
             print(line)
         print('getting finished')
+
+    def annex_ssh_get(self,username,host,path_local ,source, path='.'):
+        print('git annex get -f '+source.name+' '+path)
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path_local + " && git annex get -f "+source.name+" "+path
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdErr)
+        print(cmdAnswer)
+        print('getting finished')
+
 
     def annex_get_from_all(self, path='.'):
         print('git annex get  '+path)
@@ -242,6 +290,15 @@ class Repo:
         print('getting finished')
         return 0
 
+    def annex_ssh_drop(self,username,host,path_local, path='.'):
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path_local + " && git annex drop " + path
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdErr)
+        print(cmdAnswer)
+        print('getting finished')
+        return 0
 
     def annex_unlock(self, path='.'):
         p = Popen(['git', 'annex', 'unlock', path], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
@@ -251,6 +308,22 @@ class Repo:
 
     def annex_indirect(self):
         p = Popen(['git', 'annex', 'indirect'], cwd=self.path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+
+    def annex_ssh_direct(self,username,host,path):
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path + " && git annex direct"
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdErr)
+        print(cmdAnswer)
+
+    def annex_ssh_indirect(self,username,host,path):
+        password = []
+        connection = Ssh(host, username, password)
+        command = "cd " + path + " && git annex indirect"
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        print(cmdErr)
+        print(cmdAnswer)
 
     def get_autopushing_names(self):
         names = []
@@ -349,12 +422,104 @@ class Repo:
         self.annex_sync(repo)
         self.annex_get(repo)
 
+    def get_ssh_from(self, username,host,path,repo):
+        self.annex_indirect()
+        repo.annex_ssh_indirect(username,host,path)
+        repo.annex_ssh_add(username,host,path)
+        repo.annex_ssh_sync(username,host,path,self)
+        self.annex_sync(repo)
+        self.annex_get(repo)
 
-def create_repository(local_repo, path, name):
-    local_repo.annex_init()
+    def get_ssh_from_v2(self, username,host,path,repo):
+        self.annex_ssh_indirect(username,host,path)
+        repo.annex_indirect()
+        repo.annex_add()
+        repo.annex_sync(repo)
+        self.annex_ssh_sync(username,host,path,self)
+        self.annex_ssh_get(username,host,path,repo)
+    #tworzenie to samo ale dla
+
+def remote_ssh_add(new_repo,local_repo):
+    name = local_repo.name
+    if name not in new_repo.remote_names:
+        local_user=getpass.getuser()
+        username, host, path = split_data(new_repo.path)
+        password = []
+        hostname=socket.gethostname()
+        ip=socket.gethostbyname(hostname)
+        connection = Ssh(host, username, password)
+        command = "cd " + path + " && git remote add "+name+" ssh://"+local_user+"@"+ip+local_repo.path
+        cmdAnswer, cmdErr = connection.git_Command2(command)
+        if (cmdAnswer[:-1] == '') & (cmdErr == ''):
+            print('Remote added')
+            new_repo.remotes.append(local_repo)
+            new_repo.remote_names.append(name)
+            return 0
+    return 1
+
+def annex_ssh_sync(new_repo, remote):
+    print('git annex sync '+remote.name)
+
+    username, host, path = split_data(new_repo.path)
+    password = []
+    connection = Ssh(host, username, password)
+    command = "cd " + path + " && git annex sync "+ remote.name
+    cmdAnswer, cmdErr = connection.git_Command2(command)
+    if (cmdAnswer[:-1] == '') & (cmdErr == ''):
+        print('Repo synced')
+    else:
+        print('Failed repo synced')
+    return 0
+
+def create_repository(local_repo, path, name,if_ssh):
+    local_repo.annex_init(0)
     new_repo = Repo(name, path, logs=1)
-    new_repo.annex_init()
-    local_repo.connect_remotes(new_repo)
-    local_repo.annex_sync(new_repo)
-    new_repo.annex_sync(local_repo)
+    new_repo.annex_init(if_ssh)
+    if(if_ssh==1):
+        res=remote_ssh_add(new_repo,local_repo)
+        res2=local_repo.remote_add(new_repo)
+        if(res==res2):
+            print("Remoted repos")
+        else:
+            print("Failed connected repos")
+        local_repo.annex_sync(new_repo)
+        annex_ssh_sync(new_repo,local_repo)
+    else:
+        local_repo.connect_remotes(new_repo)
+        local_repo.annex_sync(new_repo)
+        new_repo.annex_sync(local_repo)
 
+def get_backup(path):
+    back_path=path+'-copy'
+    if not os.path.exists(back_path):
+       os.makedirs(back_path)
+       print("created directory")
+       p = Popen(['git', 'init', back_path], cwd=back_path, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+                 bufsize=1)
+       for line in p.stderr:
+           print(line.decode('UTF-8')[:-1])
+       for line in p.stdout:
+           print(line.decode('UTF-8')[:-1])
+       p = Popen(['git','annex' ,'init', back_path], cwd=back_path, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+                 bufsize=1)
+       for line in p.stderr:
+           print(line.decode('UTF-8')[:-1])
+       for line in p.stdout:
+           print(line.decode('UTF-8')[:-1])
+
+    tmp=path+'/.'
+    p = Popen(['git', 'annex', 'import','--duplicate',tmp], cwd=back_path, stdin=PIPE, stdout=PIPE, stderr=PIPE, bufsize=1)
+    for line in p.stderr:
+        print(line.decode('UTF-8')[:-1])
+    for line in p.stdout:
+        print(line.decode('UTF-8')[:-1])
+
+def from_backup(path):
+    back_path=path+'-copy'
+    tmp = back_path + '/.'
+    p = Popen(['git', 'annex', 'import', '--duplicate', tmp], cwd=path, stdin=PIPE, stdout=PIPE, stderr=PIPE,
+              bufsize=1)
+    for line in p.stderr:
+        print(line.decode('UTF-8')[:-1])
+    for line in p.stdout:
+        print(line.decode('UTF-8')[:-1])

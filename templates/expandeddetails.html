@@ -47,7 +47,7 @@
                         {% for j in range(albkeylen) %}
                             <tr>
                                 <td> {{ dictionary.language_album[j] }} </td>
-                                <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' style="width: 400px;"/></td>
+                               <td><input type="text"  name={{ i*albkeylen + (details[i][3] - details[i][2]|length) * itemkeylen+j }} value='{{ details[i][0][dictionary.album_keys[j]] }}' style="width: 400px;"/></td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -118,5 +118,11 @@
         {% endif %}
         </p>
         <br>
+         <form action="/deleteAlbum" method="post">
+             {{ details[0][1][0][dictionary.item_keys[7]] }}
+             <input type="hidden" name="album" value="{{ details[0][0][dictionary.album_keys[0]] }}"/>
+             <input type="hidden" name="artist" value="{{ details[0][0][dictionary.album_keys[1]] }}"/>
+        <button class="btn btn-lg btn-primary" type="submit">Usuń album</button>
+         </form>
 </div>
 {% endblock %}

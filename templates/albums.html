@@ -1,8 +1,9 @@
 {% extends "mainMenu.html" %}
 {% block content %}
-<a class="active" href="/">Albumy</a>
+<a class="active" href="/" xmlns:py="">Albumy</a>
 <a  href="/repositories">Repozytoria</a>
-<a onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>
+<!--<a  onclick="openImport()"><font color="OldLace">Dodaj muzykę</font></a>-->
+<a  href="/startImporting"><font color="OldLace">Dodaj muzykę</font></a>
 {% endblock %}
 {% block head %}
 <div id="boxed" class="column2 pointer" style="display:block">
@@ -20,20 +21,25 @@
 {% endblock %}
 
 {% block content_body %}
-<div id="import" class="topnav2" style="display:none;">
-    <div class="another">
-        <form action="/startImporting" method="post">
-            <input type="text" name="Path"></input>
-            <button class="btn btn-lg btn-primary">
-            <i class="glyphicon glyphicon-plus"></i>Importuj</button>
-            </button>
-        </form>
-    </div>
-    <div class="another2">
-        <span  onclick="closeImport()"class="glyphicon glyphicon-remove"/>
-    </div>
-</div>
-
+     <!--   <div id="import" class="topnav2" style="display:none;">
+            <div class="another">
+                <form action="/returnPathname" name="Path">
+                    <button class="btn btn-lg btn-primary">
+                    Prześlij ścieżkę </button>
+                    </button>
+                </form>
+                <form action="/startImporting" method="post">
+                    <input id="Path" type="text" name="Path" value=""></input>
+                    <button class="btn btn-lg btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i>Importuj</button>
+                    </button>
+                </form>
+            </div>
+            <div class="another2">
+                <span  onclick="closeImport()"class="glyphicon glyphicon-remove"/>
+            </div>
+        </div>
+-->
 <div id="menu1" class="main2" style="display: block;">
 
     <div id="box0" class="container" style="display: block;">
